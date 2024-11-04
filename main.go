@@ -9,21 +9,16 @@ func main() {
 	screenHeight := int32(900)
 
 	rl.InitWindow(screenWitdh, screenHeight, "PONG")
-	//rl.SetWindowState(rl.FlagWindowResizable)
 	defer rl.CloseWindow()
 
 	rl.SetTargetFPS(60)
 
-	//startTime := time.Now()
-
-	var b *ball
+	g := newGame(float32(screenWitdh), float32(screenHeight))
 
 	fadeOutStartText := 255
 	fadeInGame := 0
 
 	for !rl.WindowShouldClose() { // monitorWidth 1920, monitorHeight 1080
-
-		//elapsedTime := time.Since(startTime).Seconds()
 
 		rl.BeginDrawing()
 
@@ -35,12 +30,16 @@ func main() {
 			if fadeInGame < 255 {
 				fadeInGame += 15
 			}
-			if b == nil {
+			/*if b == nil {
 				b = newBall(float32(screenWitdh/2), float32(screenHeight/2), 3, 3)
 			} else {
 				b.spawn(fadeInGame)
 				b.move(float32(screenWitdh), float32(screenHeight))
+			}*/
+			if fadeInGame == 255 {
+				g.update()
 			}
+			g.start(fadeInGame)
 		}
 
 		rl.ClearBackground(rl.Black)
