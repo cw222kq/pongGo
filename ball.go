@@ -10,7 +10,7 @@ type ball struct {
 	radius   float32
 }
 
-func newBall(posX float32, posY float32, speedX float32, speedY float32) *ball {
+func NewBall(posX float32, posY float32, speedX float32, speedY float32) *ball {
 	return &ball{
 		position: rl.Vector2{X: posX, Y: posY},
 		speed:    rl.Vector2{X: speedX, Y: speedY},
