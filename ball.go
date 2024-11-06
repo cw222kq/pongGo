@@ -1,6 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"math/rand"
+	"time"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -10,9 +14,24 @@ type ball struct {
 	radius   float32
 }
 
-func NewBall(posX float32, posY float32, speedX float32, speedY float32) *ball {
+func NewBall() *ball {
+
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+
+	speedX := float32(3)
+	speedY := float32(3)
+
+	if r.Intn(2) == 0 {
+		speedX = -speedX
+	}
+
+	if r.Intn(2) == 0 {
+		speedY = -speedY
+	}
+
 	return &ball{
-		position: rl.Vector2{X: posX, Y: posY},
+		position: rl.Vector2{X: float32(rl.GetScreenWidth() / 2), Y: float32(rl.GetScreenHeight() / 2)},
 		speed:    rl.Vector2{X: speedX, Y: speedY},
 		radius:   10.0,
 	}
@@ -42,7 +61,13 @@ func (b *ball) move(paddleLPos rl.Rectangle, paddleRPos rl.Rectangle) { // - lef
 	b.position.Y += b.speed.Y
 
 	if b.isCollidingWithPaddle(paddleLPos) || b.isCollidingWithPaddle(paddleRPos) {
+		fmt.Println(b.speed.X)
 		b.speed.X = -b.speed.X
+		if b.speed.X < 0 {
+			b.speed.X = b.speed.X - 1.5
+		} else {
+			b.speed.X = b.speed.X + 1.5
+		}
 	}
 
 	if b.isCollidingWithWall() {
