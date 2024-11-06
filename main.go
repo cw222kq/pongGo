@@ -13,7 +13,7 @@ func main() {
 
 	rl.SetTargetFPS(60)
 
-	g := newGame(float32(screenWitdh), float32(screenHeight))
+	g := newGame()
 
 	fadeOutStartText := 255
 	fadeInGame := 0
@@ -47,8 +47,8 @@ func main() {
 		textSize := int32(30)
 		textWidth := int32(rl.MeasureText(text, textSize))
 
-		x := (screenWitdh - textWidth) / 2
-		y := (screenHeight - textSize) / 2
+		x := (int32(rl.GetScreenWidth()) - textWidth) / 2
+		y := (int32(rl.GetScreenHeight()) - textSize) / 2
 		rl.DrawText(text, x, y, textSize, rl.NewColor(255, 255, 255, byte(fadeOutStartText)))
 
 		rl.EndDrawing()

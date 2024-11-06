@@ -8,9 +8,9 @@ type paddle struct {
 	color    rl.Color
 }
 
-func NewPaddle(screenHeight float32, posX float32) *paddle {
+func NewPaddle(posX float32) *paddle {
 	return &paddle{
-		position: rl.Vector2{X: posX, Y: float32(screenHeight)/2 - 200/2},
+		position: rl.Vector2{X: posX, Y: float32(rl.GetScreenHeight())/2 - 200/2},
 		size:     rl.Vector2{X: 20, Y: 200},
 		color:    rl.NewColor(255, 255, 255, 255),
 	}

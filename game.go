@@ -10,19 +10,15 @@ type game struct {
 	ball        *ball
 	paddleL     *paddle
 	paddleR     *paddle
-	witdh       float32
-	height      float32
 	startTime   time.Time
 	elapsedTime float64
 }
 
-func newGame(screenWitdh float32, screenHeight float32) *game {
+func newGame() *game {
 	return &game{
-		ball:      NewBall(float32(screenWitdh/2), float32(screenHeight/2), -3, 3),
-		paddleL:   NewPaddle(float32(screenHeight), 80.0),
-		paddleR:   NewPaddle(float32(screenHeight), float32(screenWitdh-80.0)),
-		witdh:     screenWitdh,
-		height:    screenHeight,
+		ball:      NewBall(float32(rl.GetScreenWidth()/2), float32(rl.GetScreenHeight()/2), -3, 3),
+		paddleL:   NewPaddle(float32(80.0)),
+		paddleR:   NewPaddle(float32(rl.GetScreenWidth() - 80.0)),
 		startTime: time.Now(),
 	}
 
