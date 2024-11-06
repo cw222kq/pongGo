@@ -22,20 +22,30 @@ func (b *ball) spawn(fadeValue int) {
 	rl.DrawCircleV((*b).position, float32((*b).radius), (rl.NewColor(255, 255, 255, byte(fadeValue))))
 }
 
-func (b *ball) move(screenWitdh float32, screenHeight float32) { // - left & - up
+func (b *ball) isCollidingWithPaddle(paddlePos rl.Rectangle) bool {
+	return rl.CheckCollisionCircleRec(b.position, b.radius, paddlePos)
+}
+
+func (b *ball) isCollidingWithWall() bool {
+	minY := b.radius
+	maxY := float32(rl.GetScreenHeight()) - b.radius
+
+	if minY > b.position.Y || maxY < b.position.Y {
+		return true
+	}
+
+	return false
+}
+
+func (b *ball) move(paddleLPos rl.Rectangle, paddleRPos rl.Rectangle) { // - left & - up
 	b.position.X += b.speed.X
 	b.position.Y += b.speed.Y
 
-	minX := b.radius
-	minY := b.radius
-	maxX := float32(screenWitdh) - b.radius
-	maxY := float32(screenHeight) - b.radius
-
-	if minX > b.position.X || maxX < b.position.X {
+	if b.isCollidingWithPaddle(paddleLPos) || b.isCollidingWithPaddle(paddleRPos) {
 		b.speed.X = -b.speed.X
 	}
 
-	if minY > b.position.Y || maxY < b.position.Y {
+	if b.isCollidingWithWall() {
 		b.speed.Y = -b.speed.Y
 	}
 }
