@@ -6,13 +6,15 @@ type paddle struct {
 	position rl.Vector2
 	size     rl.Vector2
 	color    rl.Color
+	score    int
 }
 
-func NewPaddle(posX float32) *paddle {
+func NewPaddle(posX float32, c rl.Color) *paddle {
 	return &paddle{
 		position: rl.Vector2{X: posX, Y: float32(rl.GetScreenHeight())/2 - 200/2},
 		size:     rl.Vector2{X: 20, Y: 200},
-		color:    rl.NewColor(255, 255, 255, 255),
+		color:    c,
+		score:    0,
 	}
 }
 

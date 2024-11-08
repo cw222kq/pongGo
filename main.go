@@ -9,6 +9,7 @@ func main() {
 	screenHeight := int32(900)
 
 	rl.InitWindow(screenWitdh, screenHeight, "PONG")
+	rl.InitAudioDevice()
 	defer rl.CloseWindow()
 
 	rl.SetTargetFPS(60)
@@ -22,6 +23,16 @@ func main() {
 
 		rl.BeginDrawing()
 
+		if !g.isGameOngoing() {
+			if rl.IsKeyDown(rl.KeyN) {
+				g = newGame()
+			}
+
+			if rl.IsKeyDown(rl.KeyQ) {
+				return
+			}
+		}
+
 		if fadeOutStartText > 0 {
 			fadeOutStartText -= 3
 		}
@@ -30,12 +41,7 @@ func main() {
 			if fadeInGame < 255 {
 				fadeInGame += 15
 			}
-			/*if b == nil {
-				b = newBall(float32(screenWitdh/2), float32(screenHeight/2), 3, 3)
-			} else {
-				b.spawn(fadeInGame)
-				b.move(float32(screenWitdh), float32(screenHeight))
-			}*/
+
 			if fadeInGame == 255 {
 				g.update()
 			}
@@ -44,12 +50,12 @@ func main() {
 
 		rl.ClearBackground(rl.Black)
 		text := "Welcome to Pong!"
-		textSize := int32(30)
+		textSize := int32(40)
 		textWidth := int32(rl.MeasureText(text, textSize))
 
-		x := (int32(rl.GetScreenWidth()) - textWidth) / 2
-		y := (int32(rl.GetScreenHeight()) - textSize) / 2
-		rl.DrawText(text, x, y, textSize, rl.NewColor(255, 255, 255, byte(fadeOutStartText)))
+		startX := (int32(rl.GetScreenWidth()) - textWidth) / 2
+		yPos := (int32(rl.GetScreenHeight()) - textSize) / 2
+		rl.DrawText(text, startX, yPos, textSize, rl.NewColor(255, 255, 255, byte(fadeOutStartText)))
 
 		rl.EndDrawing()
 	}

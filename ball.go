@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -9,9 +8,10 @@ import (
 )
 
 type ball struct {
-	position rl.Vector2
-	speed    rl.Vector2
-	radius   float32
+	position      rl.Vector2
+	speed         rl.Vector2
+	radius        float32
+	isChangingDir bool
 }
 
 func NewBall() *ball {
@@ -50,6 +50,7 @@ func (b *ball) isCollidingWithWall() bool {
 	maxY := float32(rl.GetScreenHeight()) - b.radius
 
 	if minY > b.position.Y || maxY < b.position.Y {
+		b.isChangingDir = true
 		return true
 	}
 
@@ -61,12 +62,13 @@ func (b *ball) move(paddleLPos rl.Rectangle, paddleRPos rl.Rectangle) { // - lef
 	b.position.Y += b.speed.Y
 
 	if b.isCollidingWithPaddle(paddleLPos) || b.isCollidingWithPaddle(paddleRPos) {
-		fmt.Println(b.speed.X)
 		b.speed.X = -b.speed.X
 		if b.speed.X < 0 {
 			b.speed.X = b.speed.X - 1.5
+			b.isChangingDir = true
 		} else {
 			b.speed.X = b.speed.X + 1.5
+			b.isChangingDir = true
 		}
 	}
 
