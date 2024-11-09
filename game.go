@@ -10,17 +10,22 @@ type game struct {
 	ball      *ball
 	paddleL   *paddle
 	paddleR   *paddle
+	sound     *sound
 	scoreSize int32
 }
 
-func newGame() *game {
-	rl.PlaySound(rl.LoadSound("./assets/start.mp3"))
-	return &game{
+func NewGame() *game {
+	g := &game{
 		ball:      NewBall(),
 		paddleL:   NewPaddle(float32(80.0), rl.NewColor(0, 102, 204, 255)),
 		paddleR:   NewPaddle(float32(rl.GetScreenWidth()-80.0-20.0), rl.NewColor(255, 204, 0, 255)),
+		sound:     NewSound(),
 		scoreSize: 60,
 	}
+
+	g.sound.play(g.sound.start)
+
+	return g
 }
 
 func (g *game) updateScore() {
@@ -47,7 +52,9 @@ func (g *game) drawScores(fadeInGame int, textSize int32) {
 		yPos *= 2
 		endText := "Press 'N' to start a new game or 'Q' to quit."
 		endTextSize := int32(60)
-		rl.DrawText(endText, int32(startX), int32(yPos+600), endTextSize, rl.NewColor(255, 255, 255, byte(fadeInGame)))
+		endTextWidth := rl.MeasureText(endText, endTextSize)
+		endTextstartX := (screenWidth - float32(endTextWidth)) / 2
+		rl.DrawText(endText, int32(endTextstartX), int32(yPos+600), endTextSize, rl.NewColor(255, 255, 255, byte(fadeInGame)))
 
 	}
 
@@ -70,12 +77,12 @@ func (g *game) isGameOngoing() bool {
 
 func (g *game) isBallOutOfScreen() bool {
 	if g.ball.position.X < 0 || g.ball.position.X > float32(rl.GetScreenWidth()) {
-		rl.PlaySound(rl.LoadSound("./assets/windSound.wav"))
+		g.sound.play(g.sound.ballOutOfScreen)
 		g.updateScore()
 		if g.isGameOngoing() {
 			g.ball = nil
 		} else {
-			rl.PlaySound(rl.LoadSound("./assets/gameOver.mp3"))
+			g.sound.play(g.sound.gameOver)
 		}
 		return true
 	}
@@ -100,7 +107,7 @@ func (g *game) update() {
 		}
 
 		if g.ball.isChangingDir {
-			rl.PlaySound(rl.LoadSound("./assets/click.wav"))
+			g.sound.play(g.sound.hit)
 			g.ball.isChangingDir = false
 		}
 

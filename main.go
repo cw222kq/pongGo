@@ -14,7 +14,7 @@ func main() {
 
 	rl.SetTargetFPS(60)
 
-	g := newGame()
+	g := NewGame()
 
 	fadeOutStartText := 255
 	fadeInGame := 0
@@ -25,7 +25,7 @@ func main() {
 
 		if !g.isGameOngoing() {
 			if rl.IsKeyDown(rl.KeyN) {
-				g = newGame()
+				g = NewGame()
 			}
 
 			if rl.IsKeyDown(rl.KeyQ) {
